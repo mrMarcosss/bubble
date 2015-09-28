@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+    login
+    <a href="{% url 'registration' %}">{% trans 'реєстрація'|capfirst %}</a>
+    <a href="{% url 'password_recovery' %}">{% trans 'забули пароль?'|capfirst %}</a>
+{% endblock %}

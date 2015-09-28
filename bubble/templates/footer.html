@@ -1,0 +1,14 @@
+{% load flatpages %}
+<div class="uk-container uk-container-center">
+    <p class="uk-text-center uk-margin">
+        {% get_flatpages as flatpages %}
+        {% for flatpage in flatpages %}
+            <a href="{{ flatpage.url }}" style="padding-right: 20px;">{{ flatpage.title }}</a>
+        {% endfor %}
+    </p>
+
+
+    <p class="uk-text-center uk-text-muted uk-margin">
+        &copy; {% now 'Y' %} {{ DEFAULT_TITLE }}
+    </p>
+</div>

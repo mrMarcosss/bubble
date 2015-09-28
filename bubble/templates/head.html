@@ -1,0 +1,22 @@
+{% load static i18n %}
+    <nav class="uk-navbar">
+        <a href="{% url 'main' %}" class="uk-navbar-brand">Bubble</a>
+        <ul class="uk-navbar-nav">
+            <li><a href="#">One</a></li>
+        </ul>
+        <ul class="uk-navbar-nav uk-float-right">
+            <form action="{% url 'set_language' %}" method="post">
+                <input type="hidden" name="next" value="{{ redirect_to }}">
+                <input type="hidden" id="set_lang_code" name="language" value="">
+            </form>
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <li>
+                    <a href="#" title="{{ language.name_local }}"
+                        {% if language.code == LANGUAGE_CODE %}style="font-weight: bold;"{% endif %}
+                        onclick="$('#set_lang_code').val('{{ language.code }}').closest('form').submit();
+                        return false"> {{ language.code }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>

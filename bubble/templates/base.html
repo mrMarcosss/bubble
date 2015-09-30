@@ -2,26 +2,28 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{% static 'bubble/img/favicon.png' %}" type="image/png"/>
     <title>{% block title %}{{ DEFAULT_TITLE }}{% endblock %}</title>
     {% block css %}
-        <link rel="stylesheet" href="{% static 'uikit/css/uikit.min.css' %}"/>
-        <link rel="stylesheet" href="{% static 'bubble/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}"/>
     {% endblock %}
 </head>
 <body>
-    <div class="uk-container uk-container-center">
+    <div class="container">
         {% block head %}
             {% include 'head.html' %}
         {% endblock %}
         {% block content %}{% endblock %}
     </div>
-    <footer>
+    <footer class="navbar-fixed-bottom">
         {% include 'footer.html' %}
     </footer>
     {% block js %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script src="{% static 'uikit/js/uikit.min.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     {% endblock %}
 </body>
 </html>

@@ -1,4 +1,4 @@
-{% load static %}<!DOCTYPE html>
+{% load static bubble %}<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
@@ -16,6 +16,7 @@
         {% block head %}
             {% include 'head.html' %}
         {% endblock %}
+        {% show_messages %}
         {% block content %}{% endblock %}
     </div>
     <footer class="navbar-fixed-bottom">

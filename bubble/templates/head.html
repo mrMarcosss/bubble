@@ -3,7 +3,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
-                <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                             data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -15,8 +14,7 @@
                     <a class="navbar-brand" href="{% url 'main' %}">Bubble</a>
                 </div>
             </div>
-            <div class="col-md-9">
-                {#        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+            <div class="col-md-8">
                 <ul class="nav navbar-nav">
                     <li><a href="#">One</a></li>
                     <li><a href="#">Two</a></li>
@@ -38,8 +36,15 @@
                         </li>
                     {% endfor %}
                 </ul>
+
             </div>
-            {#        </div>#}
+            {% if user.is_authenticated %}
+                <div class="col-md-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'logout' %}">{% trans 'вихід'|capfirst %}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
             <!-- /.navbar-collapse -->
         </div>
     </div>

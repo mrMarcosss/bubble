@@ -1,5 +1,6 @@
 # coding=utf-8
 import hashlib
+import os
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -7,6 +8,7 @@ from django.core.signing import Signer, TimestampSigner
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 
@@ -28,6 +30,16 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, True, True, **extra_fields)
 
 
+def get_image_file_name(instance, filename):
+    id_str = str(instance.pk)
+    return 'avatars/{sub_dir}/{id}_{rand}{ext}'.format(
+        sub_dir=id_str.zfill(2)[-2:],
+        id=id_str,
+        rand=get_random_string(8, 'abcdefghijklmnopqrstuvwxyz0123456789'),
+        ext=os.path.splitext(filename)[1],
+    )
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     GENDER_NONE = 0
     GENDER_MALE = 1
@@ -40,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email'), unique=True)
     first_name = models.CharField(_('first name'), max_length=40)
     last_name = models.CharField(_('last name'), max_length=40, blank=True)
+    avatar = models.ImageField(_(u'аватарка'), upload_to=get_image_file_name, blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
                                    help_text=_('Designates whether the user can log into this admin site.'))
     is_active = models.BooleanField(_('active'), default=True,

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     profile
+    <a class="btn btn-primary" href="{% url 'settings' %}">settings</a>
 {% endblock %}

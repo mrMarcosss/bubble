@@ -9,6 +9,7 @@
     {% block css %}
         <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
         <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'bubble/css/style.css' %}">
     {% endblock %}
 </head>
 <body>
@@ -17,9 +18,9 @@
             {% include 'head.html' %}
         {% endblock %}
         {% show_messages %}
-        {% block content %}{% endblock %}
+        {% block content %} {% endblock %}
     </div>
-    <footer class="navbar-fixed-bottom">
+    <footer class="">
         {% include 'footer.html' %}
     </footer>
     {% block js %}

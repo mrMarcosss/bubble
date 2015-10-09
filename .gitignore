@@ -3,3 +3,7 @@
 
 #db
 db.sqlite3
+
+#MDIA
+media/
+!media/avatars/.gitkeep

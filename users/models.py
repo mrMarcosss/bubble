@@ -106,3 +106,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             ugettext(u'Підтвердіть відновлення пароля | bubble'),
             ugettext(u'Для підтвердження перейдіть по лінку: {}'.format(url))
         )
+
+
+class UserWallPost(models.Model):
+    user = models.ForeignKey(User, verbose_name=_(u'вланик стіни'), related_name='wall_posts')
+    author = models.ForeignKey(User, verbose_name=_(u'автор'), related_name='+')
+    content = models.TextField(verbose_name=_(u'контент'), max_length=4000)
+    created = models.DateTimeField(verbose_name=_(u'дата створення'), auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ('-created',)

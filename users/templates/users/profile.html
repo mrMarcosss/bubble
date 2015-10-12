@@ -1,7 +1,125 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n users humanize bubble %}
 
 {% block content %}
-    profile
-    <a class="btn btn-primary" href="{% url 'settings' %}">settings</a>
+    <div class="row">
+        <div class="col-md-3">
+            <img class="img-responsive myimg" src="{{ profile_user|get_avatar }}" alt="avatar">
+            {% if profile_user.pk == user.pk %}
+                <a class="btn btn-default btn-block" style="margin-top: 20px;" href="{% url 'settings' %}">{% trans 'налаштування'|capfirst %}</a>
+                <p>{{ profile_user.pk }}</p>
+                <p>{{ user.pk }}</p>
+            {% else %}
+                <a class="btn btn-success btn-block" style="margin-top: 20px;" href="#">
+                    {% trans 'добавити в друзі'|capfirst %}
+                </a>
+                <a class="btn btn-primary btn-block" style="margin-top: 20px;" href="#">
+                    {% trans 'написати повідомлення'|capfirst %}
+                </a>
+                <p>{{ profile_user.pk }}</p>
+                <p>{{ user.pk }}</p>
+            {% endif %}
+        </div>
+        <div class="col-md-offset-1 col-md-8">
+            <h1>{{ profile_user.get_full_name }}</h1>
+            <table class="table borderless">
+                <tbody>
+                    {% if profile_user.gender %}
+                        <tr>
+                            <td>{% trans 'стать'|capfirst %}:</td>
+                            <td>{{ profile_user.get_gender_display }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if profile_user.birth_date %}
+                        <tr>
+                            <td>{% trans 'дата народження'|capfirst %}:</td>
+                            <td>{{ profile_user.birth_date }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if profile_user.city %}
+                        <tr>
+                            <td>{% trans 'місто'|capfirst %}:</td>
+                            <td>{{ profile_user.city }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if profile_user.job %}
+                        <tr>
+                            <td>{% trans 'робота'|capfirst %}:</td>
+                            <td>{{ profile_user.job }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if profile_user.about_me %}
+                        <tr>
+                            <td>{% trans 'про мене'|capfirst %}:</td>
+                            <td>{{ profile_user.about_me|linebreaksbr }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if profile_user.interests %}
+                        <tr>
+                            <td>{% trans 'інтереси'|capfirst %}:</td>
+                            <td>{{ profile_user.interests|linebreaksbr }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            <div style="padding: 5px; margin-left: 15px; margin-top: 20px;">
+            <div class="row">
+                <div class="col-md-11">
+                    <form action="" class="form-horizontal" method="post">
+                        {% csrf_token %}
+                        {% show_form_field_errors wall_post_form.content.errors %}
+                        <div class="form-group{% if wall_post_form.content.errors %} has-error{% endif %}">
+                            {{ wall_post_form.content }}
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="{% trans 'опублікувати'|capfirst %}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+            {% for post in posts_on_wall %}
+                <div style="padding: 5px; margin-top: 20px;">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="{% url 'user_profile' post.author_id %}">
+                                <img class="img-responsive myimg" src="{{ post.author|get_avatar }}" alt="">
+                            </a>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <a href="{% url 'user_profile' post.author_id %}">{{ post.author.get_full_name }}</a>
+                                    <span title="{{ post.created }}" style="margin-left: 25px">
+                                        {{ post.created|naturaltime }}
+                                    </span>
+                                </div>
+                                <div class="panel-body">
+                                    {{ post.content|linebreaksbr }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% if posts_on_wall.has_other_pages %}
+                 <ul class="pager">
+                    {% if posts_on_wall.has_previous %}
+                        <li class="prev">
+                            <a href="?page={{ posts_on_wall.previous_page_number }}">
+                                &larr; {% trans 'нові'|capfirst %}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if posts_on_wall.has_next %}
+                        <li>
+                            <a href="?page={{ posts_on_wall.next_page_number }}">
+                                {% trans 'старі'|capfirst %} &rarr;
+                            </a>
+                        </li>
+                    {% endif %}
+                 </ul>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

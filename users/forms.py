@@ -4,7 +4,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.core import validators
 from django.utils.translation import ugettext
 from bubble.forms import BootstrapFormMixin
-from users.models import User
+from users.models import User, UserWallPost
 
 
 class ProfileSettingsForm(forms.ModelForm, BootstrapFormMixin):
@@ -58,3 +58,19 @@ class UserChangeEmailForm(forms.Form, BootstrapFormMixin):
         if commit:
             self.user.save()
         return self.user
+
+
+class WallPostForm(forms.ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = UserWallPost
+        fields = ('content',)
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': ugettext(u'напишіть на стіні...'), 'rows': 4})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(WallPostForm, self).__init__(*args, **kwargs)
+        BootstrapFormMixin.__init__(self)
+
+    def clean_content(self):
+        return self.cleaned_data['content'].strip()

@@ -7,9 +7,13 @@ from django.core.mail import send_mail
 from django.core.signing import Signer, TimestampSigner
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
+
+def get_id_from_users(*users):
+    return [user.pk if isinstance(user, User) else int(user) for user in users]
 
 
 class UserManager(BaseUserManager):
@@ -29,6 +33,35 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         return self._create_user(email, password, True, True, **extra_fields)
 
+
+class UserFriendShipManager(models.Manager):
+    def are_friends(self, user1, user2):
+        user1_id, user2_id = get_id_from_users(user1, user2)
+        return self.filter(pk=user1_id, friends__pk=user2_id).exists()
+
+    def add(self, user1, user2):
+        user1_id, user2_id = get_id_from_users(user1, user2)
+        if user1_id == user2_id:
+            raise ValueError(_(u'Ви не можете себе добавити в друзі'))
+        if not self.are_friends(user1_id, user2_id):
+            through_model = self.model.friends.through
+            through_model.objects.bulk_create([
+                through_model(from_user_id=user1_id, to_user_id=user2_id),
+                through_model(from_user_id=user2_id, to_user_id=user1_id),
+            ])
+            FriendInvite.objects.filter(
+                Q(from_user_id=user1_id, to_user_id=user2_id) | Q(from_user_id=user2_id, to_user_id=user1_id)
+            ).delete()
+            return True
+
+    def delete(self, user1, user2):
+        user1_id, user2_id = get_id_from_users(user1, user2)
+        if self.are_friends(user1_id, user2_id):
+            through_model = self.model.friends.through
+            through_model.objects.filter(
+                Q(from_user_id=user1_id, to_user_id=user2_id) | Q(from_user_id=user2_id, to_user_id=user1_id)
+            ).delete()
+            return True
 
 def get_image_file_name(instance, filename):
     id_str = str(instance.pk)
@@ -66,8 +99,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     job = models.CharField(_(u'робота'), max_length=200, blank=True)
     about_me = models.TextField(_(u'про мене'), max_length=10000, blank=True)
     interests = models.TextField(_(u'інтереси'), max_length=10000, blank=True)
+    friends = models.ManyToManyField('self', verbose_name=_(u'друзі'), symmetrical=True, blank=True)
 
     objects = UserManager()
+    friendship = UserFriendShipManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']
@@ -106,6 +141,45 @@ class User(AbstractBaseUser, PermissionsMixin):
             ugettext(u'Підтвердіть відновлення пароля | bubble'),
             ugettext(u'Для підтвердження перейдіть по лінку: {}'.format(url))
         )
+
+
+class FriendInviteManager(models.Manager):
+    def is_panding(self, from_user, to_user):
+        from_user_id, to_user_id = get_id_from_users(from_user, to_user)
+        return self.filter(from_user_id=from_user_id, to_user_id=to_user_id).exists()
+
+    def add(self, from_user, to_user):
+        from_user_id, to_user_id = get_id_from_users(from_user, to_user)
+        if from_user_id == to_user_id:
+            raise ValueError(_(u'Ви не можете себе добавити в друзі'))
+        if User.friendship.are_friends(from_user_id, to_user_id):
+            raise ValueError(_(u'Ви вже є в друзях'))
+        if self.is_panding(from_user_id, to_user_id):
+            raise ValueError(_(u'Заявку вже оформлена і чекає на розгляд'))
+        if self.is_panding(to_user_id, from_user_id):
+            User.friendship.add(from_user_id, to_user_id)
+            return 2
+        self.create(from_user_id=from_user_id, to_user_id=to_user_id)
+        return 1
+
+    def approve(self, from_user, to_user):
+        from_user_id, to_user_id = get_id_from_users(from_user, to_user)
+        if not self.is_panding(from_user_id, to_user_id):
+            raise ValueError(_(u'Заявку не існує'))
+        User.friendship.add(from_user, to_user)
+
+    def reject(self, from_user, to_user):
+        from_user_id, to_user_id = get_id_from_users(from_user, to_user)
+        self.filter(from_user_id=from_user_id, to_user_id=to_user_id).delete()
+
+class FriendInvite(models.Model):
+    from_user = models.ForeignKey(User, related_name='out_friend_invites')
+    to_user = models.ForeignKey(User, related_name='in_friend_invites')
+
+    objects = FriendInviteManager()
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')
 
 
 class UserWallPost(models.Model):

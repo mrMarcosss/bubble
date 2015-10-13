@@ -22,9 +22,11 @@
                 <h1>{% trans 'усі друзі'|capfirst %}</h1>
 
                 {% for item in items %}
-                    <div class="row">
+                    <div class="row" style="margin-top: 25px;">
                         <div class="col-md-2">
-                            <img class="img-responsive myimg" src="{{ item|get_avatar }}" alt="">
+                            <a href="{% url 'user_profile' item.pk %}">
+                                <img class="img-responsive myimg" src="{{ item|get_avatar }}" alt="">
+                            </a>
                         </div>
                         <div class="col-md-10">
                             <h3>

@@ -15,7 +15,8 @@
                         <input type="hidden" name="action" value="delete_from_friends">
                         <input type="hidden" name="user_id" value="{{ profile_user.pk }}">
                         <input type="hidden" name="next"  value="{{ request.get_full_path }}">
-                        <input type="submit" class="btn btn-danger" value="{% trans 'видалити з друзів'|capfirst %}">
+                        <input type="submit" class="btn btn-danger btn-block" style="margin-top: 20px;"
+                               value="{% trans 'видалити з друзів'|capfirst %}">
                     </form>
                 {% else %}
                     <form action="{% url 'user_friendship_api' %}" method="post">
@@ -23,7 +24,8 @@
                         <input type="hidden" name="action" value="add_to_friends">
                         <input type="hidden" name="user_id" value="{{ profile_user.pk }}">
                         <input type="hidden" name="next"  value="{{ request.get_full_path }}">
-                        <input type="submit" class="btn btn-success" value="{% trans 'добавити в друзі'|capfirst %}">
+                        <input type="submit" class="btn btn-success btn-block" style="margin-top: 20px;"
+                               value="{% trans 'добавити в друзі'|capfirst %}">
                     </form>
                 {% endif %}    
             {% endif %}
@@ -70,24 +72,24 @@
                     {% endif %}
                 </tbody>
             </table>
-            <div style="padding: 5px; margin-left: 15px; margin-top: 20px;">
-            <div class="row">
-                <div class="col-md-11">
-                    <form action="" class="form-horizontal" method="post">
-                        {% csrf_token %}
-                        {% show_form_field_errors wall_post_form.content.errors %}
-                        <div class="form-group{% if wall_post_form.content.errors %} has-error{% endif %}">
-                            {{ wall_post_form.content }}
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="{% trans 'опублікувати'|capfirst %}">
-                        </div>
-                    </form>
+            <div style="padding: 5px; margin-left: 15px; margin-top: 20px; margin-bottom: 75px;">
+                <div class="row">
+                    <div class="col-md-11">
+                        <form action="" class="form-horizontal" method="post">
+                            {% csrf_token %}
+                            {% show_form_field_errors wall_post_form.content.errors %}
+                            <div class="form-group{% if wall_post_form.content.errors %} has-error{% endif %}">
+                                {{ wall_post_form.content }}
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="{% trans 'опублікувати'|capfirst %}">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-            </div>
             {% for post in posts_on_wall %}
-                <div style="padding: 5px; margin-top: 20px;">
+                <div style="padding: 5px;">
                     <div class="row">
                         <div class="col-md-2">
                             <a href="{% url 'user_profile' post.author_id %}">

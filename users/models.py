@@ -166,7 +166,7 @@ class FriendInviteManager(models.Manager):
         from_user_id, to_user_id = get_id_from_users(from_user, to_user)
         if not self.is_panding(from_user_id, to_user_id):
             raise ValueError(_(u'Заявку не існує'))
-        User.friendship.add(from_user, to_user)
+        return User.friendship.add(from_user, to_user)
 
     def reject(self, from_user, to_user):
         from_user_id, to_user_id = get_id_from_users(from_user, to_user)

@@ -5,19 +5,27 @@
     <div class="row">
         <div class="col-md-3">
             <img class="img-responsive myimg" src="{{ profile_user|get_avatar }}" alt="avatar">
-            {% if profile_user.pk == user.pk %}
-                <a class="btn btn-default btn-block" style="margin-top: 20px;" href="{% url 'settings' %}">{% trans 'налаштування'|capfirst %}</a>
-                <p>{{ profile_user.pk }}</p>
-                <p>{{ user.pk }}</p>
+            {% if profile_user == user %}
+                <a class="btn btn-default btn-block" style="margin-top: 20px;" href="{% url 'settings' %}">
+                    {% trans 'налаштування'|capfirst %}</a>
             {% else %}
-                <a class="btn btn-success btn-block" style="margin-top: 20px;" href="#">
-                    {% trans 'добавити в друзі'|capfirst %}
-                </a>
-                <a class="btn btn-primary btn-block" style="margin-top: 20px;" href="#">
-                    {% trans 'написати повідомлення'|capfirst %}
-                </a>
-                <p>{{ profile_user.pk }}</p>
-                <p>{{ user.pk }}</p>
+                {% if is_my_friend %}
+                    <form action="{% url 'user_friendship_api' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_from_friends">
+                        <input type="hidden" name="user_id" value="{{ profile_user.pk }}">
+                        <input type="hidden" name="next"  value="{{ request.get_full_path }}">
+                        <input type="submit" class="btn btn-danger" value="{% trans 'видалити з друзів'|capfirst %}">
+                    </form>
+                {% else %}
+                    <form action="{% url 'user_friendship_api' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_to_friends">
+                        <input type="hidden" name="user_id" value="{{ profile_user.pk }}">
+                        <input type="hidden" name="next"  value="{{ request.get_full_path }}">
+                        <input type="submit" class="btn btn-success" value="{% trans 'добавити в друзі'|capfirst %}">
+                    </form>
+                {% endif %}    
             {% endif %}
         </div>
         <div class="col-md-offset-1 col-md-8">
@@ -102,24 +110,7 @@
                     </div>
                 </div>
             {% endfor %}
-            {% if posts_on_wall.has_other_pages %}
-                 <ul class="pager">
-                    {% if posts_on_wall.has_previous %}
-                        <li class="prev">
-                            <a href="?page={{ posts_on_wall.previous_page_number }}">
-                                &larr; {% trans 'нові'|capfirst %}
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% if posts_on_wall.has_next %}
-                        <li>
-                            <a href="?page={{ posts_on_wall.next_page_number }}">
-                                {% trans 'старі'|capfirst %} &rarr;
-                            </a>
-                        </li>
-                    {% endif %}
-                 </ul>
-            {% endif %}
+            {% show_paginator posts_on_wall %}
         </div>
     </div>
 {% endblock %}

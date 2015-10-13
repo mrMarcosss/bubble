@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% if page.has_other_pages %}
+     <ul class="pager">
+        {% if page.has_previous %}
+            <li class="prev">
+                <a href="?{{ page_arg_name }}={{ page.previous_page_number }}">
+                    &larr; {% trans 'нові'|capfirst %}
+                </a>
+            </li>
+        {% endif %}
+        {% if page.has_next %}
+            <li>
+                <a href="?{{ page_arg_name }}={{ page.next_page_number }}">
+                    {% trans 'старі'|capfirst %} &rarr;
+                </a>
+            </li>
+        {% endif %}
+     </ul>
+{% endif %}

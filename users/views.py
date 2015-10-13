@@ -3,12 +3,14 @@ from django.contrib import messages
 from django.contrib.auth import BACKEND_SESSION_KEY, login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
-from django.views.generic import TemplateView
+from django.views.decorators.http import require_POST
+from django.views.generic import TemplateView, View
 from users.forms import ProfileSettingsForm, UserChangePasswordForm, UserChangeEmailForm, WallPostForm
-from users.models import User
+from users.models import User, FriendInvite
 
 
 class UserProfileView(TemplateView):
@@ -38,6 +40,8 @@ class UserProfileView(TemplateView):
         context['profile_user'] = self.user
         context['posts_on_wall'] = self.get_wall_posts()
         context['wall_post_form'] = self.wall_post_form
+        if self.request.user != self.user:
+            context['is_my_friend'] = User.friendship.are_friends(self.request.user, self.user)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -62,7 +66,8 @@ class UserSettings(TemplateView):
             (request.FILES if action == 'profile' else None),
             prefix='profile', instance=request.user
         )
-        self.user_change_password = UserChangePasswordForm(request.user, (request.POST if action == 'password' else None),
+        self.user_change_password = UserChangePasswordForm(request.user,
+                                                           (request.POST if action == 'password' else None),
                                                            prefix='password')
         self.user_change_email = UserChangeEmailForm(request.user, (request.POST if action == 'email' else None),
                                                      prefix='email')
@@ -91,3 +96,134 @@ class UserSettings(TemplateView):
             messages.success(request, _(u'Email успішно змінений та збережений'))
             return redirect(request.path)
         return self.get(request, *args, **kwargs)
+
+
+class UserFriendsView(TemplateView):
+    template_name = 'users/friends_base.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserFriendsView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserFriendsView, self).get_context_data(**kwargs)
+        context['friend_menu'] = 'friends'
+        paginator = Paginator(self.request.user.friends.all(), 20)
+        page = self.request.GET.get('page')
+        try:
+            items = paginator.page(page)
+        except PageNotAnInteger:
+            items = paginator.page(1)
+        except EmptyPage:
+            items = paginator.page(paginator.num_pages)
+        context['items'] = items
+        return context
+
+
+class UserFriendsIncomeView(TemplateView):
+    template_name = 'users/friends_income.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserFriendsIncomeView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserFriendsIncomeView, self).get_context_data(**kwargs)
+        context['friend_menu'] = 'friends_income'
+        paginator = Paginator(self.request.user.in_friend_invites.all(), 20)
+        page = self.request.GET.get('page')
+        try:
+            items = paginator.page(page)
+        except PageNotAnInteger:
+            items = paginator.page(1)
+        except EmptyPage:
+            items = paginator.page(paginator.num_pages)
+        context['items'] = items
+        return context
+
+
+class UserFriendsOutcomeView(TemplateView):
+    template_name = 'users/friends_outcome.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserFriendsOutcomeView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserFriendsOutcomeView, self).get_context_data(**kwargs)
+        context['friend_menu'] = 'friends_outcome'
+        paginator = Paginator(self.request.user.out_friend_invites.all(), 20)
+        page = self.request.GET.get('page')
+        try:
+            items = paginator.page(page)
+        except PageNotAnInteger:
+            items = paginator.page(1)
+        except EmptyPage:
+            items = paginator.page(paginator.num_pages)
+        context['items'] = items
+        return context
+
+
+class FriendshipAPIView(View):
+    @method_decorator(login_required)
+    @method_decorator(require_POST)
+    def dispatch(self, request, *args, **kwargs):
+        method_name = '_action_{}'.format(request.POST.get('action', ''))
+        if not hasattr(self, method_name):
+            raise Http404
+        default_url = getattr(self, method_name)()
+        return redirect(request.POST.get('next') or default_url or 'main')
+
+    def _get_user_from_post_field(self, field_name):
+        try:
+            return User.objects.get(pk=self.request.POST.get(field_name))
+        except (User.DoesNotExist, ValueError):
+            pass
+
+    def _action_add_to_friends(self):
+        user = self._get_user_from_post_field('user_id')
+        if user:
+            try:
+                r = FriendInvite.objects.add(self.request.user, user)
+            except ValueError, e:
+                messages.warning(self.request, e)
+            else:
+                if r == 1:
+                    messages.success(self.request, _(u'Заявка успішно відправлена і очікує розгляду'))
+                elif r == 2:
+                    messages.success(self.request, _(u'Коростувач успішно добавлений'))
+                    return 'friends'
+        return 'friends_outcome'
+
+    def _action_approve(self):
+        user = self._get_user_from_post_field('user_id')
+        if user:
+            try:
+                 r = FriendInvite.objects.approve(user, self.request.user)
+            except ValueError, e:
+                messages.warning(self.request, e)
+            else:
+                if r:
+                     messages.success(self.request, _(u'Заявка успішно підтверджена'))
+        return 'friends_income'
+
+    def _action_reject(self):
+        user = self._get_user_from_post_field('user_id')
+        if user:
+            FriendInvite.objects.reject(user, self.request.user)
+            messages.success(self.request, _(u'Заявка успішно відхилена'))
+        return 'friends_income'
+
+    def _action_cancel_outcome(self):
+        user = self._get_user_from_post_field('user_id')
+        if user:
+            FriendInvite.objects.filter(from_user=self.request.user, to_user=user).delete()
+            messages.success(self.request, _(u'Заявка успішно відмінена'))
+        return 'friends_outcome'
+
+    def _action_delete_from_friends(self):
+        user = self._get_user_from_post_field('user_id')
+        if user:
+            if User.friendship.delete(self.request.user, user):
+                messages.success(self.request, _(u'Користувач успішно видалений'))
+        return 'friends'

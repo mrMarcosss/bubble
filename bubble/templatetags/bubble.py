@@ -23,3 +23,11 @@ def show_form_errors(form, block_class=None):
         'errors': form.non_field_errors(),
         'block_class': block_class,
     }
+
+
+@register.inclusion_tag('bubble/tags/paginator.html')
+def show_paginator(page, page_arg_name='page'):
+    return {
+        'page': page,
+        'page_arg_name': page_arg_name,
+    }

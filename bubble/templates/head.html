@@ -16,8 +16,13 @@
             </div>
             <div class="col-md-8">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">One</a></li>
-                    <li><a href="#">Two</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="#">{% trans 'новини'|capfirst %}</a></li>
+                        <li><a href="{% url 'user_profile' user.pk %}">{% trans 'мій профіль'|capfirst %}</a></li>
+                        <li><a href="{% url 'friends' %}">{% trans 'друзі'|capfirst %}</a></li>
+                        <li><a href="#">{% trans 'повідомлення'|capfirst %}</a></li>
+                        <li><a href="#">{% trans 'пошук людей'|capfirst %}</a></li>
+                    {% endif %}
                 </ul>
             </div>
             <div class="col-md-2">

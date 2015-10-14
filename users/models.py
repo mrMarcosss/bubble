@@ -1,6 +1,7 @@
 # coding=utf-8
 import hashlib
 import os
+import datetime
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -116,6 +117,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def get_age(self):
+        if self.birth_date:
+            return int((datetime.date.today() - self.birth_date).days / 365.2425)
 
     def send_registration_email(self):
         url = 'http://{}{}'.format(

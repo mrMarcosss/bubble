@@ -74,3 +74,28 @@ class WallPostForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean_content(self):
         return self.cleaned_data['content'].strip()
+
+
+class SearchPeopleForm(forms.Form, BootstrapFormMixin):
+    fname_and_lname = forms.CharField(label=ugettext(u"ім'я, прізвище"), required=False)
+    gender = forms.TypedChoiceField(label=ugettext(u'стать'),
+                                    choices=((0, ugettext(u'всі')),) + User.GENDER_CHOICES[1:],
+                                    coerce=lambda val: int(val), required=False)
+    from_date = forms.IntegerField(label=ugettext(u'рік народження з'), required=False,
+                                   widget=forms.NumberInput(attrs={'placeholder': ugettext(u'від')}))
+    to_date = forms.IntegerField(label=ugettext(u'рік народження до'), required=False,
+                                 widget=forms.NumberInput(attrs={'placeholder': ugettext(u'до')}))
+    city = forms.CharField(label=ugettext(u'місто'), required=False)
+    job = forms.CharField(label=ugettext(u'робота'), required=False)
+    about_me = forms.CharField(label=ugettext(u'про себе'), required=False)
+    interests = forms.CharField(label=ugettext(u'інтереси'), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(SearchPeopleForm, self).__init__(*args, **kwargs)
+        BootstrapFormMixin.__init__(self)
+
+    def get_values_list(self, field_name):
+        val = self.cleaned_data.get(field_name)
+        if isinstance(val, basestring):
+            val = val.strip().split()
+        return val or []

@@ -1,15 +1,19 @@
 # coding=utf-8
+from urlparse import urlparse
+from urlparse import parse_qs
+import datetime
 from django.contrib import messages
 from django.contrib.auth import BACKEND_SESSION_KEY, login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.views.generic import TemplateView, View
-from users.forms import ProfileSettingsForm, UserChangePasswordForm, UserChangeEmailForm, WallPostForm
+from users.forms import ProfileSettingsForm, UserChangePasswordForm, UserChangeEmailForm, WallPostForm, SearchPeopleForm
 from users.models import User, FriendInvite
 
 
@@ -199,12 +203,12 @@ class FriendshipAPIView(View):
         user = self._get_user_from_post_field('user_id')
         if user:
             try:
-                 r = FriendInvite.objects.approve(user, self.request.user)
+                r = FriendInvite.objects.approve(user, self.request.user)
             except ValueError, e:
                 messages.warning(self.request, e)
             else:
                 if r:
-                     messages.success(self.request, _(u'Заявка успішно підтверджена'))
+                    messages.success(self.request, _(u'Заявка успішно підтверджена'))
         return 'friends_income'
 
     def _action_reject(self):
@@ -227,3 +231,60 @@ class FriendshipAPIView(View):
             if User.friendship.delete(self.request.user, user):
                 messages.success(self.request, _(u'Користувач успішно видалений'))
         return 'friends'
+
+
+class UserSearchPeople(TemplateView):
+    template_name = 'users/search.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.form = SearchPeopleForm(request.GET or None)
+        return super(UserSearchPeople, self).dispatch(request, *args, **kwargs)
+
+    def get_filtered_qs(self, qs):
+        self.form.is_valid()
+        if not hasattr(self.form, 'cleaned_data'):
+            return qs
+        if self.form.cleaned_data.get('fname_and_lname'):
+            query = None
+            for val in self.form.get_values_list('fname_and_lname'):
+                print val
+                q = Q(first_name__icontains=val) | Q(last_name__icontains=val)
+                if query is None:
+                    query = q
+                else:
+                    query |= q
+            if query:
+                qs = qs.filter(query)
+        if self.form.cleaned_data.get('gender'):
+            qs = qs.filter(gender=self.form.cleaned_data['gender'])
+        if self.form.cleaned_data.get('from_date'):
+            qs = qs.filter(birth_date__gte=datetime.datetime(self.form.cleaned_data['from_date'], 1, 1))
+        if self.form.cleaned_data.get('to_date'):
+            qs = qs.filter(birth_date__lt=datetime.datetime(self.form.cleaned_data['to_date'] + 1, 1, 1))
+        for field_name in ('city', 'job', 'about_me', 'interests'):
+            query = None
+            for val in self.form.get_values_list(field_name):
+                q = Q(**{'{}__icontains'.format(field_name): val})
+                if query is None:
+                    query = q
+                else:
+                    query |= q
+            if query:
+                qs = qs.filter(query)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(UserSearchPeople, self).get_context_data(**kwargs)
+        context['form'] = self.form
+        qs = self.get_filtered_qs(User.objects.all())
+        paginator = Paginator(qs, 20)
+        page = self.request.GET.get('page')
+        try:
+            items = paginator.page(page)
+        except PageNotAnInteger:
+            items = paginator.page(1)
+        except EmptyPage:
+            items = paginator.page(paginator.num_pages)
+        context['items'] = items
+        return context

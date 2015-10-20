@@ -20,7 +20,7 @@
                         <li><a href="#">{% trans 'новини'|capfirst %}</a></li>
                         <li><a href="{% url 'user_profile' user.pk %}">{% trans 'мій профіль'|capfirst %}</a></li>
                         <li><a href="{% url 'friends' %}">{% trans 'друзі'|capfirst %}</a></li>
-                        <li><a href="#">{% trans 'повідомлення'|capfirst %}</a></li>
+                        <li><a href="{% url 'messages' %}">{% trans 'повідомлення'|capfirst %}</a></li>
                         <li><a href="{% url 'search' %}">{% trans 'пошук людей'|capfirst %}</a></li>
                     {% endif %}
                 </ul>

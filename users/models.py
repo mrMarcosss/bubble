@@ -84,8 +84,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         (GENDER_FEMALE, _(u'жінка')),
     )
     email = models.EmailField(_('email'), unique=True)
-    first_name = models.CharField(_('first name'), max_length=40)
-    last_name = models.CharField(_('last name'), max_length=40, blank=True)
+    first_name = models.CharField(_(u"ім'я"), max_length=40)
+    last_name = models.CharField(_(u'прізвище'), max_length=40, blank=True)
     avatar = models.ImageField(_(u'аватарка'), upload_to=get_image_file_name, blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
                                    help_text=_('Designates whether the user can log into this admin site.'))
@@ -195,3 +195,6 @@ class UserWallPost(models.Model):
 
     class Meta:
         ordering = ('-created',)
+
+    def __unicode__(self):
+    	return self.content

@@ -27,11 +27,13 @@
                         <input type="submit" class="btn btn-success btn-block" style="margin-top: 20px;"
                                value="{% trans 'добавити в друзі'|capfirst %}">
                     </form>
-                {% endif %}    
+                {% endif %}
+                <a class="btn btn-default btn-block" style="margin-top: 20px;"
+                   href="{% url 'messages' profile_user.pk %}">{% trans 'написати повідомлення'|capfirst %}</a>
             {% endif %}
         </div>
         <div class="col-md-offset-1 col-md-8">
-            <h1>{{ profile_user.get_full_name }}</h1>
+            <h1 style="padding: 0; margin: 0 0 15px 0;">{{ profile_user.get_full_name }}</h1>
             <table class="table borderless">
                 <tbody>
                     {% if profile_user.gender %}

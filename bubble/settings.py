@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     'users',
     'bubble',
     'auths',
+    'dialogs',
 )
 
 AUTH_USER_MODEL = 'users.User'

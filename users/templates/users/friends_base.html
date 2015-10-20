@@ -32,15 +32,21 @@
                             <h3>
                                 <a href="{% url 'user_profile' item.pk %}">{{ item.get_full_name }}</a>
                             </h3>
-                            <p>
-                            <form action="{% url 'user_friendship_api' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete_from_friends">
-                                <input type="hidden" name="user_id" value="{{ item.pk }}">
-                                <input type="hidden" name="next"  value="{{ request.get_full_path }}">
-                                <input type="submit" class="btn btn-danger" value="{% trans 'видалити з друзів'|capfirst %}">
-                            </form>
-                            </p>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <form action="{% url 'user_friendship_api' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete_from_friends">
+                                        <input type="hidden" name="user_id" value="{{ item.pk }}">
+                                        <input type="hidden" name="next"  value="{{ request.get_full_path }}">
+                                        <input type="submit" class="btn btn-danger" value="{% trans 'видалити з друзів'|capfirst %}">
+                                    </form>
+                                </div>
+                                <div class="col-md-3">
+                                    <a class="btn btn-success" href="{% url 'messages' item.pk %}">
+                                        {% trans 'напсати повідомлення'|capfirst %}</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

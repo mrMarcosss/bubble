@@ -1,3 +1,7 @@
+*.py[cod]
+*.mo
+*.pot
+
 #IDE
 .idea
 
@@ -7,3 +11,7 @@ db.sqlite3
 #MDIA
 media/
 !media/avatars/.gitkeep
+
+#STATIC
+static/
+!static/.gitkeep

@@ -9,9 +9,11 @@ from django.core.signing import Signer, TimestampSigner
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
+from django.dispatch import Signal
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
+
 
 def get_id_from_users(*users):
     return [user.pk if isinstance(user, User) else int(user) for user in users]
@@ -53,6 +55,7 @@ class UserFriendShipManager(models.Manager):
             FriendInvite.objects.filter(
                 Q(from_user_id=user1_id, to_user_id=user2_id) | Q(from_user_id=user2_id, to_user_id=user1_id)
             ).delete()
+            make_friends.send(self.model, user1_id=user1_id, user2_id=user2_id)
             return True
 
     def delete(self, user1, user2):
@@ -62,7 +65,9 @@ class UserFriendShipManager(models.Manager):
             through_model.objects.filter(
                 Q(from_user_id=user1_id, to_user_id=user2_id) | Q(from_user_id=user2_id, to_user_id=user1_id)
             ).delete()
+            break_friends.send(self.model, user1_id=user1_id, user2_id=user2_id)
             return True
+
 
 def get_image_file_name(instance, filename):
     id_str = str(instance.pk)
@@ -177,6 +182,7 @@ class FriendInviteManager(models.Manager):
         from_user_id, to_user_id = get_id_from_users(from_user, to_user)
         self.filter(from_user_id=from_user_id, to_user_id=to_user_id).delete()
 
+
 class FriendInvite(models.Model):
     from_user = models.ForeignKey(User, related_name='out_friend_invites')
     to_user = models.ForeignKey(User, related_name='in_friend_invites')
@@ -197,4 +203,8 @@ class UserWallPost(models.Model):
         ordering = ('-created',)
 
     def __unicode__(self):
-    	return self.content
+        return self.content
+
+
+make_friends = Signal(providing_args=['user1_id', 'user2_id'])
+break_friends = Signal(providing_args=['user1_id', 'user2_id'])

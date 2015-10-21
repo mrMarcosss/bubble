@@ -17,7 +17,7 @@
             <div class="col-md-8">
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
-                        <li><a href="#">{% trans 'новини'|capfirst %}</a></li>
+                        <li><a href="{% url 'news' %}">{% trans 'новини'|capfirst %}</a></li>
                         <li><a href="{% url 'user_profile' user.pk %}">{% trans 'мій профіль'|capfirst %}</a></li>
                         <li><a href="{% url 'friends' %}">{% trans 'друзі'|capfirst %}</a></li>
                         <li><a href="{% url 'messages' %}">{% trans 'повідомлення'|capfirst %}</a></li>

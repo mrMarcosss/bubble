@@ -50,8 +50,9 @@
                                             <a href="{% url 'user_profile' message.sender.pk %}">
                                                 {{ message.sender.get_full_name }}</a>
                                             <span title="{{ message.created }}" style="margin-left: 25px;
-                                                font-size: 0.7em;">
-                                                {{ message.created|naturaltime }}</span>
+                                                font-size: 0.7em;" class="text-muted">
+                                                {{ message.created|naturaltime }}
+                                            </span>
                                         </div>
                                         <div class="panel-body">
                                             {{ message.text|linebreaksbr }}
@@ -72,8 +73,10 @@
                                         <div class="panel-heading">
                                             <a href="{% url 'user_profile' message.sender.pk %}" style="color: #003671">
                                                 {{ message.sender.get_full_name }}</a>
-                                            <span title="{{ message.created }}" style="margin-left: 25px; font-size: 0.7em;">
-                                                {{ message.created|naturaltime }}</span>
+                                            <span title="{{ message.created }}"
+                                                  style="margin-left: 25px; font-size: 0.7em; color: #606060">
+                                                {{ message.created|naturaltime }}
+                                            </span>
                                         </div>
                                         <div class="panel-body">
                                             {{ message.text|linebreaksbr }}

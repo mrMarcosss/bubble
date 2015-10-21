@@ -102,8 +102,8 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <a href="{% url 'user_profile' post.author_id %}">{{ post.author.get_full_name }}</a>
-                                    <span title="{{ post.created }}" style="margin-left: 25px">
-                                        {{ post.created|naturaltime }}
+                                    <span title="{{ post.created }}" style="margin-left: 25px; font-size: 0.7em"
+                                          class="text-muted">{{ post.created|naturaltime }}
                                     </span>
                                 </div>
                                 <div class="panel-body">

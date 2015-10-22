@@ -89,9 +89,13 @@
                 {% endfor %}
                 {% show_paginator dialog_messages 'messages-page' %}
             {% else %}
-                {% blocktrans %}
-                    Розпочніть діалог з користувачем клацнувши по його ім'я
-                {% endblocktrans %}
+                <div class="jumbotron vertical-center" style="background: none">
+                    <div class="container text-center">
+                        <h3>
+                            {% blocktrans %}У Вас ще немає розпочатих діалогів{% endblocktrans %}
+                        </h3>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>

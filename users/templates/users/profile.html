@@ -73,42 +73,47 @@
                         </tr>
                     {% endif %}
                 </tbody>
-            </table>
-            <div style="padding: 5px; margin-left: 15px; margin-top: 20px; margin-bottom: 75px;">
-                <div class="row">
-                    <div class="col-md-11">
-                        <form action="" class="form-horizontal" method="post">
+            </table>            
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 50px">
+        <div class="col-md-offset-4 col-md-8">
+            <div class="col-md-12" style="margin: 20px 0;">
+                <form class="form-horizontal" method="post">
+                    <div class="row">
+                        <div class="col-md-12">
                             {% csrf_token %}
                             {% show_form_field_errors wall_post_form.content.errors %}
                             <div class="form-group{% if wall_post_form.content.errors %} has-error{% endif %}">
                                 {{ wall_post_form.content }}
                             </div>
+                        </div>
+                        <div class="col-md-offset-8 col-md-4">
                             <div class="form-group">
-                                <input type="submit" class="btn btn-primary" value="{% trans 'опублікувати'|capfirst %}">
+                                <input type="submit" class=" btn btn-primary btn-block"
+                                       value="{% trans 'опублікувати'|capfirst %}">
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
             {% for post in posts_on_wall %}
-                <div style="padding: 5px;">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <a href="{% url 'user_profile' post.author_id %}">
-                                <img class="img-responsive myimg" src="{{ post.author|get_avatar }}" alt="">
-                            </a>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a href="{% url 'user_profile' post.author_id %}">{{ post.author.get_full_name }}</a>
-                                    <span title="{{ post.created }}" style="margin-left: 25px; font-size: 0.7em"
-                                          class="text-muted">{{ post.created|naturaltime }}
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-                                    {{ post.content|linebreaksbr }}
-                                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="{% url 'user_profile' post.author_id %}">
+                            <img class="img-responsive myimg" src="{{ post.author|get_avatar }}" alt="">
+                        </a>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a href="{% url 'user_profile' post.author_id %}">{{ post.author.get_full_name }}</a>
+                                <span title="{{ post.created }}" style="margin-left: 25px; font-size: 0.7em"
+                                      class="text-muted">{{ post.created|naturaltime }}
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                {{ post.content|linebreaksbr }}
                             </div>
                         </div>
                     </div>

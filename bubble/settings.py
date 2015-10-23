@@ -92,6 +92,7 @@ LANGUAGES = (
     ('en', u'English'),
     ('ru', u'Русский'),
     ('uk', u'Українська'),
+    ('pl', u'Polski'),
 )
 
 LANGUAGE_CODE = 'uk'
@@ -120,3 +121,7 @@ LOGIN_REDIRECT_URL = 'main'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp', 'emails')
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)

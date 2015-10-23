@@ -69,7 +69,7 @@ class PasswordRecoveryForm(forms.Form, BootstrapFormMixin):
         try:
             self._user = User.objects.get(email=email)
         except User.DoesNotExist:
-            raise forms.ValidationError(_(u'Користувач з тиким email не зареєстрований'))
+            raise forms.ValidationError(_(u'Користувач з таким email не зареєстрований'))
         return email
 
     def get_user(self):

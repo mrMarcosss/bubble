@@ -25,3 +25,8 @@ html, body {
 .borderless tbody tr td {
     border: none;
 }
+
+.mypadding {
+    padding-left: 0;
+    padding-right: 0;
+}

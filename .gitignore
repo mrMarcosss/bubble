@@ -17,3 +17,4 @@ media/
 static/
 !static/.gitkeep
 
+myvenv/

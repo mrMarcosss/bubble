@@ -165,7 +165,7 @@ class FriendInviteManager(models.Manager):
         if User.friendship.are_friends(from_user_id, to_user_id):
             raise ValueError(_(u'Ви вже є в друзях'))
         if self.is_panding(from_user_id, to_user_id):
-            raise ValueError(_(u'Заявку вже оформлена і чекає на розгляд'))
+            raise ValueError(_(u'Заявка вже оформлена і чекає на розгляд'))
         if self.is_panding(to_user_id, from_user_id):
             User.friendship.add(from_user_id, to_user_id)
             return 2
@@ -175,7 +175,7 @@ class FriendInviteManager(models.Manager):
     def approve(self, from_user, to_user):
         from_user_id, to_user_id = get_id_from_users(from_user, to_user)
         if not self.is_panding(from_user_id, to_user_id):
-            raise ValueError(_(u'Заявку не існує'))
+            raise ValueError(_(u'Заявок не існує'))
         return User.friendship.add(from_user, to_user)
 
     def reject(self, from_user, to_user):
@@ -194,7 +194,7 @@ class FriendInvite(models.Model):
 
 
 class UserWallPost(models.Model):
-    user = models.ForeignKey(User, verbose_name=_(u'вланик стіни'), related_name='wall_posts')
+    user = models.ForeignKey(User, verbose_name=_(u'власник стіни'), related_name='wall_posts')
     author = models.ForeignKey(User, verbose_name=_(u'автор'), related_name='+')
     content = models.TextField(verbose_name=_(u'контент'), max_length=4000)
     created = models.DateTimeField(verbose_name=_(u'дата створення'), auto_now_add=True, db_index=True)

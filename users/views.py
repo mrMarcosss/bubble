@@ -195,7 +195,7 @@ class FriendshipAPIView(View):
                 if r == 1:
                     messages.success(self.request, _(u'Заявка успішно відправлена і очікує розгляду'))
                 elif r == 2:
-                    messages.success(self.request, _(u'Коростувач успішно добавлений'))
+                    messages.success(self.request, _(u'Користувач успішно добавлений'))
                     return 'friends'
         return 'friends_outcome'
 

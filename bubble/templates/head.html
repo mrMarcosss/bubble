@@ -14,7 +14,7 @@
                     <a class="navbar-brand" href="{% url 'main' %}">Bubble</a>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'news' %}">{% trans 'новини'|capfirst %}</a></li>
@@ -35,7 +35,8 @@
                     {% for language in languages %}
                         <li>
                             <a href="#" title="{{ language.name_local }}"
-                               {% if language.code == LANGUAGE_CODE %}style="font-weight: bold;"{% endif %}
+                               {% if language.code == LANGUAGE_CODE %}style="font-weight: bold;
+                               padding-left: 5px; padding-right: 5px"{% else %}style="padding-left: 5px; padding-right: 5px"{% endif %}
                                onclick="$('#set_lang_code').val('{{ language.code }}').closest('form').submit();
                                        return false"> {{ language.code }}</a>
                         </li>
@@ -44,7 +45,7 @@
 
             </div>
             {% if user.is_authenticated %}
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{% url 'logout' %}">{% trans 'вихід'|capfirst %}</a></li>
                     </ul>

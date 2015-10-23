@@ -24,7 +24,7 @@
             {% if opponent %}
                 <h4 class="text-center">
                     {% trans 'діалог з'|capfirst %}
-                    <img class="img-responsive myimg" style="display: inline-block;"
+                    <img class="img-responsive myimg" style="display: inline-block; margin: 0 5px 0 10px;"
                          width="30" src="{{ opponent|get_avatar }}" alt="">
                     <a href="{% url 'user_profile' opponent.pk %}">{{ opponent.get_full_name }}</a>
                 </h4>

@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core import validators
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext_lazy as ugettext
 from bubble.forms import BootstrapFormMixin
 from users.models import User, UserWallPost
 
@@ -44,7 +44,7 @@ class UserChangeEmailForm(forms.Form, BootstrapFormMixin):
     def clean_new_email(self):
         new_email = self.cleaned_data['new_email'].strip()
         if User.objects.filter(email=new_email).exclude(pk=self.user.pk).exists():
-            raise forms.ValidationError(ugettext(u'Користувач з тиким email вже зареєстрований'))
+            raise forms.ValidationError(ugettext(u'Користувач з таким email вже зареєстрований'))
         return new_email
 
     def clean_password(self):

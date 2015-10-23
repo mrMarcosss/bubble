@@ -76,6 +76,8 @@ msgid ""
 "Для підтвердження відновлення пароля перейдіть по лінку, який висланий Вам "
 "на email(%(e)s)"
 msgstr ""
+"Aby potwierdzić hasło, kliknij na link, który został wysłany do Ciebie"
+"przez e-mail(%(e)s)"
 
 #: auths/templates/auths/password_recovery.html:31
 msgid "відновити пароль"
@@ -94,7 +96,7 @@ msgstr "zmiana hasła"
 #: auths/templates/auths/registration.html:9
 #, python-format
 msgid "%(u)s, дякуємо за реєстрацію!"
-msgstr ""
+msgstr "%(u)s, dzięki za rejestrację!"
 
 #: auths/templates/auths/registration.html:14
 #, python-format
@@ -102,6 +104,8 @@ msgid ""
 "Для підтвердження реєстрації перейдіть по лінку, який висланий Вам на "
 "email(%(e)s)"
 msgstr ""
+"W celu potwierdzenia rejestracji kliknij na link, który został wysyłany do Ciebie na"
+"e-mail(%(e)s)"
 
 #: auths/templates/auths/registration.html:36
 msgid "зареєструватись"
@@ -109,7 +113,7 @@ msgstr "zarejestruj się"
 
 #: auths/views.py:63
 msgid "Ваша реєстрація успішно підтверджена. Можете увійти :)"
-msgstr ""
+msgstr "Twoja rejestracja została pomyślnie zweryfikowana. Możesz zalogować się:)"
 
 #: bubble/templates/bubble/tags/paginator.html:9
 msgid "нові"
@@ -121,7 +125,7 @@ msgstr "stary"
 
 #: bubble/templates/head.html:20 news/templates/news/news.html:6
 msgid "новини"
-msgstr ""
+msgstr "aktualności"
 
 #: bubble/templates/head.html:21
 msgid "мій профіль"
@@ -150,7 +154,7 @@ msgstr "napisz wiadomość"
 
 #: dialogs/templates/dialog/dialog.html:26
 msgid "діалог з"
-msgstr ""
+msgstr "dialog z"
 
 #: dialogs/templates/dialog/dialog.html:39
 msgid "відправити"
@@ -158,19 +162,19 @@ msgstr "wysłać"
 
 #: dialogs/templates/dialog/dialog.html:95
 msgid "У Вас ще немає розпочатих діалогів"
-msgstr ""
+msgstr "Brak otwartych dialogów"
 
 #: news/models.py:24
 msgid "повідомлення на стіні"
-msgstr ""
+msgstr "wiadomość na ścianie"
 
 #: news/models.py:25
 msgid "створення дружніх зв'язків"
-msgstr ""
+msgstr "ustanowienie przyjaznych stosunków"
 
 #: news/models.py:26
 msgid "розрив дружніх зв'язків"
-msgstr ""
+msgstr "zerwanie przyjaznych stosunków"
 
 #: news/templates/news/display_break_friends.html:5
 #: news/templates/news/display_make_friends.html:5
@@ -179,31 +183,31 @@ msgstr "i"
 
 #: news/templates/news/display_break_friends.html:10
 msgid "перестали дружити"
-msgstr ""
+msgstr "przestały przyjaźnić"
 
 #: news/templates/news/display_make_friends.html:10
 msgid "стали друзями"
-msgstr ""
+msgstr "zaprzyjaźnili"
 
 #: news/templates/news/display_wall_post.html:8
 msgid "написав на своїй стіні"
-msgstr ""
+msgstr "napisał na swojej ścianie"
 
 #: news/templates/news/display_wall_post.html:11
 msgid "написала на своїй стіні"
-msgstr ""
+msgstr "napisała na  swojej ścianie"
 
 #: news/templates/news/display_wall_post.html:16
 msgid "написав на стіні"
-msgstr ""
+msgstr "napisał na ścianie"
 
 #: news/templates/news/display_wall_post.html:19
 msgid "написала на стіні"
-msgstr ""
+msgstr "napisała na ścianie"
 
 #: users/forms.py:18
 msgid "Введіть дату у форматі РРРР-ММ-ДД"
-msgstr ""
+msgstr "Wprowadź datę w formacie RRRR-MM-DD"
 
 #: users/forms.py:35
 msgid "новий email"
@@ -215,7 +219,7 @@ msgstr "aktualne hasło"
 
 #: users/forms.py:53
 msgid "Невірно введений пароль"
-msgstr ""
+msgstr "Podany hasło jest błędne"
 
 #: users/forms.py:68
 msgid "напишіть на стіні..."
@@ -235,7 +239,7 @@ msgstr "wszystko"
 
 #: users/forms.py:84
 msgid "рік народження з"
-msgstr ""
+msgstr "rok urodzenia"
 
 #: users/forms.py:85
 msgid "від"
@@ -243,7 +247,7 @@ msgstr "z"
 
 #: users/forms.py:86
 msgid "рік народження до"
-msgstr ""
+msgstr "rok urodzenia do"
 
 #: users/forms.py:87
 msgid "до"
@@ -267,7 +271,7 @@ msgstr "interesy"
 
 #: users/models.py:48 users/models.py:164
 msgid "Ви не можете себе добавити в друзі"
-msgstr ""
+msgstr "Nie możesz dodać siebie jako znajomego"
 
 #: users/models.py:87
 msgid "---"
@@ -291,7 +295,7 @@ msgstr "nazwisko"
 
 #: users/models.py:94
 msgid "аватарка"
-msgstr ""
+msgstr "zdjęcia"
 
 #: users/models.py:95
 msgid "staff status"
@@ -329,19 +333,19 @@ msgstr "o mnie"
 
 #: users/models.py:136
 msgid "Підтвердіть реєстрацію | bubble"
-msgstr ""
+msgstr "Potwierdzenie rejestracji | bubble"
 
 #: users/models.py:137
 msgid "Для підтвердження реєстрації перейдіть по лінку: {}"
-msgstr ""
+msgstr "W celu potwierdzenia rejestracji kliknij na link: {}"
 
 #: users/models.py:151
 msgid "Підтвердіть відновлення пароля | bubble"
-msgstr ""
+msgstr "Potwierdź odzyskiwania hasła | bubble"
 
 #: users/models.py:152
 msgid "Для підтвердження перейдіть по лінку: {}"
-msgstr ""
+msgstr "Aby potwierdzić, kliknij na link: {}"
 
 #: users/models.py:166
 msgid "Ви вже є в друзях"
@@ -349,15 +353,15 @@ msgstr "Jesteś już przyjaciół"
 
 #: users/models.py:168
 msgid "Заявка вже оформлена і чекає на розгляд"
-msgstr ""
+msgstr "Oświadczenie przyjęte i oczekuje na zatwierdzenie"
 
 #: users/models.py:178
 msgid "Заявок не існує"
-msgstr ""
+msgstr "Brak oświadczeń"
 
 #: users/models.py:197
 msgid "власник стіни"
-msgstr ""
+msgstr "właściciel ściany"
 
 #: users/models.py:198
 msgid "автор"
@@ -373,12 +377,12 @@ msgstr "data utworzenia"
 
 #: users/templates/users/friends_base.html:13
 msgid "заявки у друзі"
-msgstr ""
+msgstr "oświadczenie do znajomych"
 
 #: users/templates/users/friends_base.html:16
 #: users/templates/users/friends_outcome.html:6
 msgid "вихідні заявки"
-msgstr ""
+msgstr "Oświadczenie wysłane"
 
 #: users/templates/users/friends_base.html:22
 msgid "усі друзі"
@@ -396,7 +400,7 @@ msgstr "napisz wiadomość"
 
 #: users/templates/users/friends_income.html:5
 msgid "вхідні заявки"
-msgstr ""
+msgstr "oświadczenie odebrane"
 
 #: users/templates/users/friends_income.html:23
 msgid "добавити"
@@ -434,7 +438,7 @@ msgstr "szukaj"
 #: users/templates/users/search.html:91
 #, python-format
 msgid "%(age)s років"
-msgstr ""
+msgstr "%(age)s lat"
 
 #: users/templates/users/settings.html:16
 msgid "видалити"
@@ -442,7 +446,7 @@ msgstr "usuń"
 
 #: users/templates/users/settings.html:20
 msgid "Ви ще не загрузили аватарки :("
-msgstr ""
+msgstr "Dodaj avatar :("
 
 #: users/templates/users/settings.html:43
 msgid "зберегти"
@@ -459,40 +463,40 @@ msgstr "aktualny adres e-mail"
 
 #: users/views.py:57
 msgid "Повідомлення успішно опубліковано"
-msgstr ""
+msgstr "Wiadomość została pomyślnie opublikowana"
 
 #: users/views.py:90
 msgid "Дані успішно змінені та збережені"
-msgstr ""
+msgstr "Dane  zostałi pomyślnie modyfikowani i zapisyani"
 
 #: users/views.py:96
 msgid "Пароль успішно змінений"
-msgstr ""
+msgstr "Hasło zostało zmienione"
 
 #: users/views.py:100
 msgid "Email успішно змінений та збережений"
-msgstr ""
+msgstr "E-mail pomyślnie modyfikowane i zapisane"
 
 #: users/views.py:196
 msgid "Заявка успішно відправлена і очікує розгляду"
-msgstr ""
+msgstr "Oświadczenie pomyślnie wysłane i oczekuje na zatwierdzenie"
 
 #: users/views.py:198
 msgid "Користувач успішно добавлений"
-msgstr ""
+msgstr "Użytkownik został dodany"
 
 #: users/views.py:211
 msgid "Заявка успішно підтверджена"
-msgstr ""
+msgstr "Oświadczenie pomyślnie potwierdzone "
 
 #: users/views.py:218
 msgid "Заявка успішно відхилена"
-msgstr ""
+msgstr "Oświadczenie odrzucone"
 
 #: users/views.py:225
 msgid "Заявка успішно відмінена"
-msgstr ""
+msgstr "Oświadczenie anulowane "
 
 #: users/views.py:232
 msgid "Користувач успішно видалений"
-msgstr ""
+msgstr "Użytkownik pomyślnie usunięty"

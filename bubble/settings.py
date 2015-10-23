@@ -119,8 +119,13 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'main'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp', 'emails')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'markusss.marko@gmail.com'
+EMAIL_HOST_PASSWORD = 'mrmarcosss'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),

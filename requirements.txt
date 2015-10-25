@@ -1,0 +1,9 @@
+pip
+setuptools
+tytz
+
+Django==1.8.4
+Pillow==3.0.0
+psycopg2==2.6.1
+uwsgi==2.010
+

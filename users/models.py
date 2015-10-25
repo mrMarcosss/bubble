@@ -192,6 +192,9 @@ class FriendInvite(models.Model):
     class Meta:
         unique_together = ('from_user', 'to_user')
 
+    def __unicode__(self):
+        return self.pk
+
 
 class UserWallPost(models.Model):
     user = models.ForeignKey(User, verbose_name=_(u'власник стіни'), related_name='wall_posts')

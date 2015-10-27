@@ -138,7 +138,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
 
     def get_last_login_hash(self):
-        return hashlib.md5(self.last_login.strftime('%Y-%m-%d-%H-%M-%S-%f')).hexdigest()[:8]
+        if self.last_login:
+            return hashlib.md5(self.last_login.strftime('%Y-%m-%d-%H-%M-%S-%f')).hexdigest()[:8]
+        else:
+            return hashlib.md5(self.date_joined.strftime('%Y-%m-%d-%H-%M-%S-%f')).hexdigest()[:8]
 
     def send_password_recovery_email(self):
         data = '{}:{}'.format(self.pk, self.get_last_login_hash())

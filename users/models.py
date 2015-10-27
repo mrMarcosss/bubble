@@ -134,7 +134,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
         self.email_user(
             ugettext(u'Підтвердіть реєстрацію | bubble'),
-            ugettext(u'Для підтвердження реєстрації перейдіть по лінку: {}'.format(url))
+            ugettext(u'Для підтвердження реєстрації перейдіть по лінку: {}').format(url)
         )
 
     def get_last_login_hash(self):
@@ -152,7 +152,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
         self.email_user(
             ugettext(u'Підтвердіть відновлення пароля | bubble'),
-            ugettext(u'Для підтвердження перейдіть по лінку: {}'.format(url))
+            ugettext(u'Для підтвердження перейдіть по лінку: {}').format(url)
         )
 
 
